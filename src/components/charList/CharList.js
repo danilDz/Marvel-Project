@@ -20,6 +20,9 @@ class CharList extends Component {
     marvelService = new MarvelService()
 
     componentDidMount () {
+
+        this.foo.bar = 0
+
         this.marvelService.getAllCharacters()
         .then(this.onCharListLoaded)
         .catch(this.onError)
@@ -41,7 +44,7 @@ class CharList extends Component {
 
     onClickCharacter = (id) => {
         document.querySelectorAll('.char__item').forEach(item => {
-            console.log(item.getAttribute('data-key'))
+            // console.log(item.getAttribute('data-key'))
             item.classList.remove('char__item_selected')
             if (item.getAttribute('data-key') == id) {
                 item.classList.add('char__item_selected')
@@ -66,11 +69,6 @@ class CharList extends Component {
         return(
             <ul className="char__grid">
                 {items}
-
-                {/* <li className="char__item char__item_selected">
-                    <img src={abyss} alt="abyss"/>
-                    <div className="char__name">Abyss</div>
-                </li> */}
             </ul>
         )
     }

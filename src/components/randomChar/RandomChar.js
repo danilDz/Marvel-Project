@@ -16,6 +16,8 @@ class RandomChar extends Component {
     marvelService = new MarvelService();
 
     componentDidMount () {
+        this.foo.bar = 0
+
         this.onChangeCharacter()
     }
 

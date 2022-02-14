@@ -1,7 +1,6 @@
 import { Component } from 'react';
 
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
@@ -58,6 +57,7 @@ class CharInfo extends Component {
         this.marvelService.getCharacter(this.props.id)
         .then(this.onCharLoaded)
         .catch(this.onError)
+        this.foo.bar = 0
     }
 
     render() {
@@ -69,7 +69,6 @@ class CharInfo extends Component {
         const content = !(error || loading || !character) ? <View character={character}/> : null
         return (
             <div className="char__info">
-                {/* <Skeleton/> */}
                 {skeleton}
                 {errorMessage}
                 {spinner}
@@ -108,9 +107,8 @@ const View = ({character}) => {
             <ul className="char__comics-list">
                 {comics.length > 0 ? null : 'There is no comics with this character!'}
                 {comics.map((item, i) => {
-                    if (i > 9) {
-                        return
-                    }
+                    // eslint-disable-next-line
+                    if (i > 9) return
                     return (
                         <li key={i} className="char__comics-item">
                             {item.name}
