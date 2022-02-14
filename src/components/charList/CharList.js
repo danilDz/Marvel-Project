@@ -7,6 +7,10 @@ import ErrorMessage from '../error/ErrorMessage';
 import Spinner from "../spinner/Spinner";
 
 class CharList extends Component {
+    constructor(props) {
+        super(props)
+    }
+
     state = {
         charList: [],
         loading: true,
@@ -35,8 +39,17 @@ class CharList extends Component {
         })
     }
 
+    onClickCharacter = (id) => {
+        document.querySelectorAll('.char__item').forEach(item => {
+            console.log(item.getAttribute('data-key'))
+            item.classList.remove('char__item_selected')
+            if (item.getAttribute('data-key') == id) {
+                item.classList.add('char__item_selected')
+            }
+        })
+    }
+
     renderItems(charList) {
-        let i = 0
         const items = charList.map(item => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
@@ -44,7 +57,7 @@ class CharList extends Component {
             }
 
             return (
-                <li className="char__item" key={i++}>
+                <li className="char__item" data-key={item.id} key={item.id} onClick={() => {this.props.getId(item.id); this.onClickCharacter(item.id)}}>
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
                 </li>

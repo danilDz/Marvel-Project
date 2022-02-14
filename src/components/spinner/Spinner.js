@@ -1,4 +1,4 @@
-import spin from '../../resources/img/1494.gif'
+import spin from '../../resources/img/1498.gif';
 
 const Spinner = () => {
     return (

@@ -34,12 +34,15 @@ class MarvelService {
         } else {
             desc = 'Informaion about this character not found!'
         }
+        // console.log(char.comics.items)
         return {
             name: char.name,
             description: desc,
+            id: char.id,
             thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
             homepage: char.urls[0].url,
-            wiki: char.urls[1].url
+            wiki: char.urls[1].url,
+            comics: char.comics.items
         }
     }
 }
