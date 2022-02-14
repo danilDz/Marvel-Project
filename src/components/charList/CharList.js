@@ -14,24 +14,32 @@ class CharList extends Component {
     state = {
         charList: [],
         loading: true,
-        error: false
+        newLoading: false,
+        error: false,
+        offset: 219,
+        charEnded: false
     }
 
     marvelService = new MarvelService()
 
     componentDidMount () {
-
-        this.foo.bar = 0
-
         this.marvelService.getAllCharacters()
         .then(this.onCharListLoaded)
         .catch(this.onError)
-    }    
+    }  
 
     onCharListLoaded = (charList) => {
+        let ended = false
+        if (charList.length < 9) {
+            ended = true
+        }
+        const newArr = [...this.state.charList, ...charList]
         this.setState({
-            charList,
-            loading: false
+            charList: newArr,
+            newLoading: false,
+            loading: false,
+            offset: this.state.offset + 9,
+            charEnded: ended
         })
     }
 
@@ -73,20 +81,40 @@ class CharList extends Component {
         )
     }
 
+    onCharListLoading = () => {
+        this.setState({
+            newLoading: true
+        })
+    }
+
+    onLoadContent = () => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(this.state.offset)
+        .then(this.onCharListLoaded)
+        .catch(this.onError);
+    }
+
     render () {
-        const {charList, loading, error} = this.state
+        const {charList, loading, error, newLoading, charEnded} = this.state
 
         const items = this.renderItems(charList)
 
+        const newLoadingList = newLoading ? <Spinner/> : null
         const errorMessage = error ? <ErrorMessage/> : null
         const spinner = loading ? <Spinner/>: null
-        const content = !(loading || error) ? items : null;
+        const content = !(loading || error) ? items : null
+
         return (
             <div className="char__list">
                 {errorMessage}
                 {spinner}
                 {content}
-                <button className="button button__main button__long">
+                {newLoadingList}
+                <button 
+                    className="button button__main button__long"
+                    style={charEnded ? {display: 'none'} : null}
+                    onClick={this.onLoadContent}
+                    disabled={newLoading}>
                     <div className="inner">load more</div>
                 </button>
             </div>
