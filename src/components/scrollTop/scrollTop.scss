@@ -1,0 +1,27 @@
+@import '../../style/variables.scss';
+
+.divScroll{
+    width: 1400px;
+    position: relative;
+    height: 100px;
+    background-color: aqua;
+    display: flex;
+    justify-content: end;
+    .scrollTop{
+        width: $size-button-scroll-top;
+        height: $size-button-scroll-top;
+        border-radius: $size-button-scroll-top/2;
+        font-size: 20px;
+        color: white;
+        background-color: rgb(51, 0, 0);
+        text-decoration: none;
+        position: fixed;
+        display: block;
+        margin-right: 10px;
+        border: none;
+        box-shadow: 3px 3px 3px 3px black;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}

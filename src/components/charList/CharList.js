@@ -1,4 +1,5 @@
 import { Component } from "react";
+import PropTypes from "prop-types";
 
 import './charList.scss';
 import abyss from '../../resources/img/abyss.jpg';
@@ -50,25 +51,46 @@ class CharList extends Component {
         })
     }
 
+    itemsRef = []
+
+    setRef = (ref) => {
+        this.itemsRef.push(ref)
+    }
+
     onClickCharacter = (id) => {
-        document.querySelectorAll('.char__item').forEach(item => {
-            // console.log(item.getAttribute('data-key'))
+        // console.log(this.itemsRef)
+
+        this.itemsRef.map(item => {
             item.classList.remove('char__item_selected')
-            if (item.getAttribute('data-key') == id) {
-                item.classList.add('char__item_selected')
-            }
         })
+        this.itemsRef[id].classList.add('char__item_selected')
+        this.itemsRef[id].focus()
+        // document.querySelectorAll('.char__item').forEach(item => {
+        //     // console.log(item.getAttribute('data-key'))
+        //     item.classList.remove('char__item_selected')
+        //     if (item.getAttribute('data-key') == id) {
+        //         item.classList.add('char__item_selected')
+        //     }
+        // })
     }
 
     renderItems(charList) {
-        const items = charList.map(item => {
+        const items = charList.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
             }
 
             return (
-                <li className="char__item" data-key={item.id} key={item.id} onClick={() => {this.props.getId(item.id); this.onClickCharacter(item.id)}}>
+                <li className="char__item"
+                //  data-key={item.id}
+                 tabIndex={0}
+                 key={item.id}
+                 ref={this.setRef}
+                 onClick={() => {
+                     this.props.getId(item.id); 
+                     this.onClickCharacter(i)
+                 }}>
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
                 </li>
@@ -120,6 +142,10 @@ class CharList extends Component {
             </div>
         )
     } 
+}
+
+CharList.propTypes = {
+    getId: PropTypes.func.isRequired
 }
 
 export default CharList;

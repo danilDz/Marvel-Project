@@ -5,6 +5,7 @@ import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
+import ScrollTop from "../scrollTop/ScrollTop";
 
 import decoration from '../../resources/img/vision.png';
 
@@ -37,6 +38,7 @@ class App extends Component {
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
+                {/* <ScrollTop/> */}
             </div>
         )
     }
