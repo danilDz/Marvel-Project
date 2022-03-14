@@ -22,7 +22,6 @@ const ComicsList = () => {
         setNewLoading(initial)
         getAllComics(offset)
         .then(onComicsListLoaded)
-        // .catch(setNewLoading(false))
     }
 
     const onComicsListLoaded = (list) => {
@@ -45,7 +44,7 @@ const ComicsList = () => {
                 <li className="comics__item"
                     key={i}
                     tabIndex={0}>
-                    <a href="#">
+                    <a href={item.urls[0].url} target="_blank">
                         <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{item.prices[0].price}$</div>
