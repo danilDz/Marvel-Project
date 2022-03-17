@@ -2,13 +2,15 @@ import './comicsList.scss';
 
 import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
 
 const ComicsList = () => {
     const [comicsList, setComicsList] = useState([])
     const [newLoading, setNewLoading] = useState(false)
-    const [offset, setOffset] = useState(0)
+    const [offset, setOffset] = useState(600)
     const [charEnded, setCharEnded] = useState(false)
 
 
@@ -44,11 +46,11 @@ const ComicsList = () => {
                 <li className="comics__item"
                     key={i}
                     tabIndex={0}>
-                    <a href={item.urls[0].url} target="_blank">
+                    <Link to={`/comics/${item.id}`}>
                         <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{item.prices[0].price}$</div>
-                    </a>
+                    </Link>
                 </li>
             )
         })
