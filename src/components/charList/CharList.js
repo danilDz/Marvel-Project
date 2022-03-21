@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import './charList.scss';
 import useMarvelService from '../../services/MarvelService';
@@ -48,6 +49,9 @@ const CharList = (props) => {
     }
 
     function renderItems(charList) {
+
+        const duration = 300;
+
         const items = charList.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
@@ -55,22 +59,26 @@ const CharList = (props) => {
             }
 
             return (
-                <li className="char__item"
-                 tabIndex={0}
-                 key={item.id}
-                 ref={el => itemsRef.current[i] = el}
-                 onClick={() => {
-                    props.getId(item.id); 
-                    onClickCharacter(i)
-                 }}>
-                    <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-                    <div className="char__name">{item.name}</div>
-                </li>
+                <CSSTransition key={item.id} timeout={duration} classNames='char__item'>
+                    <li className="char__item"
+                    tabIndex={0}
+                    key={item.id}
+                    ref={el => itemsRef.current[i] = el}
+                    onClick={() => {
+                        props.getId(item.id); 
+                        onClickCharacter(i)
+                    }}>
+                        <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
+                        <div className="char__name">{item.name}</div>
+                    </li>      
+                </CSSTransition>
             )
         })
         return(
             <ul className="char__grid">
-                {items}
+                <TransitionGroup component={null}>
+                    {items}
+                </TransitionGroup>
             </ul>
         )
     }
