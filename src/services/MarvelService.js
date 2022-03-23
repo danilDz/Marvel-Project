@@ -50,7 +50,12 @@ const useMarvelService = () => {
         return res.data.results[0]
     }
 
-    return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic}
+    const getCharByName = async (name) => {
+        const res = await request(`https://gateway.marvel.com:443/v1/public/characters?name=${name}&apikey=bd45ac9cd4c42c0d44799afb637c8179`)
+        return res.data.results
+    }
+
+    return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic, getCharByName}
 }
 
 export default useMarvelService;

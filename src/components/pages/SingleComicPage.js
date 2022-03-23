@@ -6,6 +6,7 @@ import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
+import AppBanner from '../appBanner/AppBanner';
 
 const SingleComicPage = () => {
     const {comicId} = useParams()
@@ -31,11 +32,14 @@ const SingleComicPage = () => {
     const content = !(loading || error || !comic) ? <View comic={comic}/> : null
 
     return (
-        <ErrorBoundary>
-            {spinner}
-            {errorMessage}
-            {content}
-        </ErrorBoundary>
+        <>
+            <AppBanner/>
+            <ErrorBoundary>
+                {spinner}
+                {errorMessage}
+                {content}
+            </ErrorBoundary>
+        </>
     )
 }
 
