@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Helmet } from 'react-helmet';
-import Spinner from "../spinner/Spinner";
-import ErrorMessage from "../error/ErrorMessage";
+
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import useMarvelService from "../../services/MarvelService";
+import setContent from "../../utils/setContent";
 
 import './singleComic.scss';
 import AppBanner from "../appBanner/AppBanner";
@@ -12,7 +12,7 @@ import AppBanner from "../appBanner/AppBanner";
 const SingleCharPage = () => {
     const {charName} = useParams()
     const [char, setChar] = useState(null)
-    const {loading, error, getCharByName, clearError} = useMarvelService()
+    const {getCharByName, clearError, process, setProcess} = useMarvelService()
 
     useEffect(() => {
         updateChar()
@@ -22,31 +22,26 @@ const SingleCharPage = () => {
         clearError()
         getCharByName(charName)
         .then(onCharLoaded)
+        .then(() => setProcess('confirmed'))
     }
 
     const onCharLoaded = (char) => {
         setChar(char[0])
     }
 
-    const spinner = loading ? <Spinner/> : null
-    const errorMessage = error ? <ErrorMessage/> : null
-    const content = !(loading || error || !char) ? <View char={char}/> : null
-
     return (
         <>
             <AppBanner/>
             <ErrorBoundary>
-                {spinner}
-                {errorMessage}
-                {content}
+                {setContent(process, View, char)}
             </ErrorBoundary>
         </>
         
     )
 }
 
-const View = ({char}) => {
-    const {thumbnail, name, description} = char
+const View = ({data}) => {
+    const {thumbnail, name, description} = data
     const thumb = thumbnail ? `${thumbnail.path}.${thumbnail.extension}` : null
     return (
         <div className="single-comic">

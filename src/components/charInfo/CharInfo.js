@@ -4,15 +4,13 @@ import { Link } from 'react-router-dom';
 
 import './charInfo.scss';
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../error/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
+import setContent from '../../utils/setContent';
 
 const CharInfo = (props) => {
 
     const [character, setCharacter] = useState(null)
 
-    const {loading, error, getCharacter, clearError} = useMarvelService()
+    const {getCharacter, clearError, process, setProcess} = useMarvelService()
 
     useEffect(() => {
         updateCharacter()
@@ -29,25 +27,18 @@ const CharInfo = (props) => {
         clearError()
         getCharacter(props.id)
         .then(onCharLoaded)
+        .then(() => setProcess('confirmed'))
     }
 
-    const skeleton = loading || error || character ? null : <Skeleton/>
-    const errorMessage = error ? <ErrorMessage/> : null
-    const spinner = loading ? <Spinner/> : null
-    const content = !(error || loading || !character) ? <View character={character}/> : null
     return (
         <div className="char__info">
-            {skeleton}
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, View, character)}
         </div>
     )
-
 }
 
-const View = ({character}) => {
-    const {name, thumbnail, homepage, wiki, description, comics} = character
+const View = ({data}) => {
+    const {name, thumbnail, homepage, wiki, description, comics} = data
     let imgStyle = {'objectFit' : 'cover'};
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         imgStyle = {'objectFit' : 'contain'};
@@ -55,7 +46,7 @@ const View = ({character}) => {
     return (
         <>
             <div className="char__basics">
-                <img src={character.thumbnail} alt={name} style={imgStyle}/>
+                <img src={thumbnail} alt={name} style={imgStyle}/>
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">

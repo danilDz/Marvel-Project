@@ -4,15 +4,14 @@ import {Helmet} from 'react-helmet';
 
 import './singleComic.scss';
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../error/ErrorMessage';
+import setContent from '../../utils/setContent';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 import AppBanner from '../appBanner/AppBanner';
 
 const SingleComicPage = () => {
     const {comicId} = useParams()
     const [comic, setComic] = useState(null)
-    const {loading, error, getComic, clearError} = useMarvelService()
+    const {getComic, clearError, process, setProcess} = useMarvelService()
 
     useEffect(() => {
         updateComic()
@@ -22,33 +21,27 @@ const SingleComicPage = () => {
         clearError()
         getComic(comicId)
         .then(onComicLoaded)
+        .then(() => setProcess('confirmed'))
     }
 
     const onComicLoaded = (comic) => {
         setComic(comic)
     }
 
-    const spinner = loading ? <Spinner/> : null
-    const errorMessage = error ? <ErrorMessage/> : null
-    const content = !(loading || error || !comic) ? <View comic={comic}/> : null
-
     return (
         <>
             <AppBanner/>
             <ErrorBoundary>
-                {spinner}
-                {errorMessage}
-                {content}
+                {setContent(process, View, comic)}
             </ErrorBoundary>
         </>
     )
 }
 
-const View = ({comic}) => {
-    const {thumbnail, title, prices, textObjects, pageCount} = comic
+const View = ({data}) => {
+    const {thumbnail, title, prices, textObjects, pageCount} = data
     const thumb = thumbnail ? `${thumbnail.path}.${thumbnail.extension}` : null
     const text = textObjects[0] ? textObjects[0].text : 'There isn\'t description of this comic!'
-    // console.log(comic)
     const language = textObjects[0] ? textObjects[0].language : "not available"
     const price = prices[0] && prices[0].price != 0 ? prices[0].price + "$" : "not available"
     return (
